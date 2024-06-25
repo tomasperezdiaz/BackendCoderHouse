@@ -1,0 +1,88 @@
+{{>header}}
+<div>
+  <h3>Lista de productos:</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Titulo</th>
+        <th>Descripcion</th>
+        <th>Precio</th>
+        <th>Codigo</th>
+        <th>Stock</th>
+        <th>Categoria</th>
+        <th>Estado</th>
+        <th>Imagen</th>
+        <th>Agregar</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each result.payload}}
+        <tr>
+          <td>{{this.title}} </td>
+          <td>{{this.description}} </td>
+          <td>{{this.price}} </td>
+          <td>{{this.code}} </td>
+          <td>{{this.stock}} </td>
+          <td>{{this.category}} </td>
+          <td>{{#if this.status}}
+              Activo
+            {{else}}
+              Desactivo
+            {{/if}}
+
+          </td>
+          <td>{{#if this.thumbnails.length}}
+              <a
+                href="{{this.thumbnails.[0]}}"
+                target="_blank"
+              >{{this.thumbnails.[0]}} </a>
+            {{else}}
+              No hay Imagen
+            {{/if}}
+          </td>
+          <td>
+            <button class="cart-button" onclick="addToCart('{{this._id}}')">
+                <i class="fas fa-shopping-cart cart-icon"></i>
+            </button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <span>Limite por pagina : {{result.limit}} </span><br>
+
+    {{#if result.query}}
+    <span>Filtrado por:  {{result.query}} </span> <br>
+    {{/if}}
+
+    {{#if result.hasPrePage}}
+   <a href="?page={{result.prevPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Anterior</a>
+   {{/if}}
+
+   <span>Pagina {{result.page}} de {{result.totalPages}}</span>
+
+   {{#if result.hasNextPage}}
+   <a href="?page={{result.nextPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Siguiente</a>
+   {{/if}}
+   </div>
+   <script>
+
+    function addToCart (productId){
+        fetch(`/api/carts/${idCart}/product/${productId}`, {
+        method:"POST",
+        header: {
+           "Content-type" : "application/json",
+}       }).then(resp =>resp.json())
+          .then (data=> {
+    console.log(data)
+}).catch(error=>{
+    console.log("Error", error)
+})
+    }
+</script>
+</div>
+

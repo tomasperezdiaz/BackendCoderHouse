@@ -1,0 +1,96 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  border: 1px solid rgb(134, 134, 134);
+  text-align: center;
+}
+
+th {
+  background-color: rgb(250, 236, 219);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+h1 {
+  text-align: center;
+}
+h3 {
+  text-align: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+h2 {
+  padding-top: 30px;
+  margin-left: 30px;
+}
+
+form {
+  max-width: 400px;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid rgb(236, 236, 236);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: rgb(90, 90, 90);
+
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: rgb(82, 82, 82);
+}
+
+.pagination {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 4px;
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination a:hover {
+  background-color: #555;
+}
+
+.cart-icon {
+  color:#3498db ;
+  font-size: 24px;
+  margin-right: 8px;
+}

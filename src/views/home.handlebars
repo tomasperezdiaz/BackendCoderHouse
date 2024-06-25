@@ -1,0 +1,52 @@
+{{>header}}
+<div>
+  <h1>Pagina Principal</h1>
+
+  <h3>Lista de productos</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Titulo</th>
+        <th>Descripcion</th>
+        <th>Precio</th>
+        <th>Imagen</th>
+        <th>Codigo</th>
+        <th>Stock</th>
+        <th>Status</th>
+        <th>Categoria</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#each product }}
+        <tr>
+                <td>{{this._id}}</td>
+        <td>{{this.title}} </th>
+        <td>{{this.description}} </td>
+        <td>{{this.price}} </td>
+        <td>{{#if this.thumbnail.length}}
+            <a href="{{this.thumbnail.[0]}}" target="blank">{{this.thumbnail.[0]}} </a>
+            {{else}}
+            No hay imagen
+            {{/if}}
+        </td> 
+        <td>{{this.code}} </td>
+        <td>{{this.stock}} </td>
+        <td>{{#if this.status}} 
+            Activo
+            {{else}}
+            Desactivo
+            {{/if}}
+        </td>
+        <td> {{this.category}} </td>
+        </tr>
+        {{/each}}
+        
+    </tbody>
+  </table>
+
+</div>
+<br>
+<a href="/realTimeProducts"><button> Ir a los productos actualizados en el momento </button></a>
