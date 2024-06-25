@@ -43,7 +43,7 @@
             {{/if}}
           </td>
           <td>
-            <button class="cart-button" onclick="addToCart('{{this._id}}')">
+            <button class="cart-button" onclick="addProductInCart('{{this._id}}')">
                 <i class="fas fa-shopping-cart cart-icon"></i>
             </button>
           </td>
@@ -71,10 +71,11 @@
    </div>
    <script>
 
-    function addToCart (productId){
-        fetch(`/api/carts/${idCart}/product/${productId}`, {
+    function addProductInCart (id){
+      const cid = "667b30a938dda1727e771169"
+        fetch(`/api/carts/${cid}/product/${id}`, {
         method:"POST",
-        header: {
+        headers: {
            "Content-type" : "application/json",
 }       }).then(resp =>resp.json())
           .then (data=> {

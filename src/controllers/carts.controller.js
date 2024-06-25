@@ -37,7 +37,7 @@ export const addProductInCart = async (req = request, res = response) => {
 
     return res.json({ msg: "Carrito actualizado", carrito });
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    return res.status(500).json({ msg: "Hablar con adminsss" });
   }
 };
 
@@ -88,11 +88,11 @@ export const deleteCart = async (req = request, res = response) => {
 };
 
 export const finalizarCompra = async (req = request, res = response) => {
-  const cartId = req.params.cid;
+  const cid = req.params.cid;
   try {
-    console.log(`Iniciando proceso de compra para el carrito: ${cartId}`);
+    console.log(`Iniciando proceso de compra para el carrito: ${cid}`);
 
-    const cart = await CartRepository.getCartById(cartId);
+    const cart = await CartRepository.getCartById(cid);
     if (!cart) {
       console.error("Carrito no encontrado");
       return res.status(404).json({ error: "Carrito no encontrado" });
@@ -132,7 +132,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       }
     }
 
-     const userWithCart = await UserModel.findOne({ cart: cartId });
+     const userWithCart = await UserModel.findOne({ cart: cid});
     if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
