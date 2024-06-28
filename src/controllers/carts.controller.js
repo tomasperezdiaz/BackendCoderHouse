@@ -1,7 +1,8 @@
 import { request, response } from "express";
 import { CartRepository, ProductRepository } from "../repositories/index.js";
 import { ticketModel } from "../dao/mongo/models/ticket.js";
-import { calcularTotal } from "../utils/utili.js";
+import { calcularTotal, generateUniqueCode } from "../utils/utili.js";
+import { userModel } from "../dao/mongo/models/user.js";
 
 export const getCartById = async (req = request, res = response) => {
   try {
@@ -104,7 +105,7 @@ export const finalizarCompra = async (req = request, res = response) => {
     const productosNoDisponibles = [];
 
     for (const item of products) {
-      const productId = item.product._id || item.product;
+      const productId = item.id._id || item.id;
       console.log(`Verificando producto: ${productId}`);
 
       const product = await ProductRepository.getProductsById(productId);
@@ -132,7 +133,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       }
     }
 
-    const userWithCart = await UserModel.findOne({ cart: cid });
+    const userWithCart = await userModel.findOne({ cart: cid });
     if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
@@ -144,7 +145,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       amount: calcularTotal(
         carrito.products.filter(
           (item) =>
-            !productosNoDisponibles.includes(item.product._id || item.product)
+            !productosNoDisponibles.includes(item.id._id || item.product)
         )
       ),
       purchaser: userWithCart._id,

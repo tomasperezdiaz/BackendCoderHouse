@@ -28,8 +28,6 @@ export const chatView = (req, res) => {
 export const productsView = async (req, res) => {
   const user = req.session.user;
   const result = await ProductRepository.getProducts({ ...req.query });
-  console.log(result);
-  console.log(user);
   return res.render("products", {
     title: "productos",
     result,
@@ -42,9 +40,6 @@ export const cartView = async (req, res) => {
   const user = req.session.user;
   const { cid } = req.params;
   const carrito = await CartRepository.getCartById(cid);
-  console.log(carrito);
-  console.log(carrito.products);
-  console.log({ cid });
   return res.render("cart", {
     title: "cart",
     carrito,
