@@ -18,7 +18,7 @@ export const getCartById = async (req = request, res = response) => {
 
 export const createCart = async (req = request, res = response) => {
   try {
-    const carrito = await CartRepository.createCart();
+    let carrito = await CartRepository.createCart();
     return res.json({ msg: "Carrito creado", carrito });
   } catch (error) {
     console.log("createCart ->", error);
