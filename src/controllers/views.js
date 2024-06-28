@@ -28,6 +28,8 @@ export const chatView = (req, res) => {
 export const productsView = async (req, res) => {
   const user = req.session.user;
   const result = await ProductRepository.getProducts({ ...req.query });
+  console.log(result);
+  console.log(user);
   return res.render("products", {
     title: "productos",
     result,
@@ -40,9 +42,9 @@ export const cartView = async (req, res) => {
   const user = req.session.user;
   const { cid } = req.params;
   const carrito = await CartRepository.getCartById(cid);
-  console.log(carrito)
-  console.log(carrito.products)
-  console.log({cid})
+  console.log(carrito);
+  console.log(carrito.products);
+  console.log({ cid });
   return res.render("cart", {
     title: "cart",
     carrito,
@@ -102,6 +104,6 @@ export const profile = async (req, res) => {
 
     res.render("profile", { user: userDto, isAdmin });
   } catch (error) {
-    res.status(500).send("Error en el servidor")
+    res.status(500).send("Error en el servidor");
   }
 };

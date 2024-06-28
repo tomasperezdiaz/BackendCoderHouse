@@ -76,8 +76,7 @@ export const initialPassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          const cart = await CartRepository.createCart();
-          console.log(cart);
+        
           const email = profile._json.email;
           const user = await UserRepository.getUserEmail(email);
 
@@ -89,7 +88,7 @@ export const initialPassport = () => {
             password: ".$",
             image: profile._json.avatar_url,
             github: true,
-            cart,
+           
           };
 
           const result = await UserRepository.registerUser({ ...newUser });

@@ -54,19 +54,19 @@
         <h5>Producto: {{this.id.title}}</h5>
         <p>Cantidad: {{this.quantity}}</p>
         <p>Precio: ${{this.id.price}}</p>
-        <button onclick="eliminarProducto('{{this.id._id}}')">Eliminar</button>
+        <button onclick="eliminarProducto('{{this.id._id}}','{{../carrito._id}}')">Eliminar</button>
       </div>
     </div>
     {{/each}}
   </div>
   
-  <button onclick="vaciarCarrito('{{this._id}}')">Vaciar Carrito</button>
-  <button onclick="finalizarCompra('{{this._id}}')">Finalizar Compra</button>
+  <button onclick="vaciarCarrito('{{carrito._id}}')">Vaciar Carrito</button>
+  <button onclick="finalizarCompra('{{carrito._id}}')">Finalizar Compra</button>
   <h3>Total de la compra: ${{totalCompra}}</h3>
 
   <script>
-      const cid='667b30a938dda1727e771169'
-    function eliminarProducto(id) {
+      
+    function eliminarProducto(id, cid) {
     
       fetch(`/api/carts/${cid}/product/${id}`, {
         method: 'DELETE'
@@ -82,7 +82,7 @@
       });
     }
 
-    function vaciarCarrito() {
+    function vaciarCarrito(cid) {
      
       fetch(`/api/carts/${cid}`, {
         method: 'DELETE'

@@ -92,13 +92,13 @@ export const finalizarCompra = async (req = request, res = response) => {
   try {
     console.log(`Iniciando proceso de compra para el carrito: ${cid}`);
 
-    const cart = await CartRepository.getCartById(cid);
-    if (!cart) {
+    const carrito = await CartRepository.getCartById(cid);
+    if (!carrito) {
       console.error("Carrito no encontrado");
       return res.status(404).json({ error: "Carrito no encontrado" });
     }
 
-    const products = cart.products;
+    const products = carrito.products;
     console.log(`Productos en el carrito: ${JSON.stringify(products)}`);
 
     const productosNoDisponibles = [];
@@ -132,7 +132,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       }
     }
 
-     const userWithCart = await UserModel.findOne({ cart: cid});
+    const userWithCart = await UserModel.findOne({ cart: cid });
     if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
@@ -142,7 +142,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       code: generateUniqueCode(),
       purchase_datetime: new Date(),
       amount: calcularTotal(
-        cart.products.filter(
+        carrito.products.filter(
           (item) =>
             !productosNoDisponibles.includes(item.product._id || item.product)
         )
@@ -151,10 +151,11 @@ export const finalizarCompra = async (req = request, res = response) => {
     });
     await ticket.save();
 
-    cart.products = cart.products.filter((item) =>
-      productosNoDisponibles.includes(item.product._id || item.product)
+    // Excluir los productos no disponibles del carrito
+    carrito.products = carrito.products.filter(
+      (item) => !productosNoDisponibles.includes(item.product._id || item.product)
     );
-    await cart.save();
+    await carrito.save();
 
     res.status(200).json({ productosNoDisponibles, ticketId: ticket._id });
   } catch (error) {
