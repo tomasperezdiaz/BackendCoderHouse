@@ -2,7 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import { createHash, isValidPass } from "../utils/bcryptPassword.js";
-import { CartRepository, UserRepository } from "../repositories/index.js";
+import { UserRepository } from "../repositories/index.js";
 import { createCart } from "../repositories/cartsRepository.js";
 
 const localStrategy = local.Strategy;
@@ -19,7 +19,7 @@ export const initialPassport = () => {
           if (password !== confirmPassword) {
             return done(null, false);
           }
-
+          const newCart = await createCart();
           const user = await UserRepository.getUserEmail(userName);
 
           if (user) {
@@ -28,7 +28,7 @@ export const initialPassport = () => {
 
           req.body.password = createHash(password);
 
-          const newUser = await UserRepository.registerUser({ ...req.body });
+          const newUser = await UserRepository.registerUser({ ...req.body, cart:newCart });
 
           if (newUser) return done(null, newUser);
           return done(null, false);
@@ -90,7 +90,6 @@ export const initialPassport = () => {
             image: profile._json.avatar_url,
             github: true,
             cart: newCart,
-           
           };
 
           const result = await UserRepository.registerUser({ ...newUser });
