@@ -134,7 +134,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       }
     }
 
-    const userWithCart = await userModel.findOne(({ cart: ObjectId(id) }).populate('cart'));
+    const userWithCart = await userModel.findOne(user.cart);
     if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });

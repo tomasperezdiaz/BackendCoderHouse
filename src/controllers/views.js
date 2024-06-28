@@ -29,12 +29,13 @@ export const productsView = async (req, res) => {
  
   const user = req.session.user;
   const result = await ProductRepository.getProducts({ ...req.query });
+  console.log(result)
   return res.render("products", {
     title: "productos",
     result,
     styles: "styles.css",
     user,
-   
+    cartId,
   });
 };
 
