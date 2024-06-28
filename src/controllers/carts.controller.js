@@ -4,6 +4,7 @@ import { ticketModel } from "../dao/mongo/models/ticket.js";
 import { calcularTotal, generateUniqueCode } from "../utils/utili.js";
 import { userModel } from "../dao/mongo/models/user.js";
 
+
 export const getCartById = async (req = request, res = response) => {
   try {
     const { cid } = req.params;
@@ -133,7 +134,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       }
     }
 
-    const userWithCart = await userModel.findOne({ cart: cid });
+    const userWithCart = await userModel.findOne(({ cart: ObjectId(id) }).populate('cart'));
     if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });

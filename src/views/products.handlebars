@@ -53,6 +53,8 @@
   </table>
 
   <div class="pagination">
+
+
     <span>Limite por pagina : {{result.limit}} </span><br>
 
     {{#if result.query}}
@@ -72,7 +74,7 @@
    <script>
 
     function addProductInCart (id){
-      const cid = "667b30a938dda1727e771169"
+     const cid = "667b30a938dda1727e771169"
         fetch(`/api/carts/${cid}/product/${id}`, {
         method:"POST",
         headers: {

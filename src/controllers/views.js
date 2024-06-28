@@ -26,6 +26,7 @@ export const chatView = (req, res) => {
 };
 
 export const productsView = async (req, res) => {
+ 
   const user = req.session.user;
   const result = await ProductRepository.getProducts({ ...req.query });
   return res.render("products", {
@@ -33,6 +34,7 @@ export const productsView = async (req, res) => {
     result,
     styles: "styles.css",
     user,
+   
   });
 };
 

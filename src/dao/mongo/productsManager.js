@@ -1,3 +1,4 @@
+import { createCart } from "./cartsManager.js";
 import { productoModel } from "./models/products.js";
 
 export const getProducts = async ({ limit = 10, page = 1, sort, query }) => {
@@ -36,6 +37,9 @@ export const getProducts = async ({ limit = 10, page = 1, sort, query }) => {
   const prevPage = hasPrePage ? page - 1 : null;
   const nextPage = hasNextPage ? page + 1 : null;
 
+
+
+
   return {
     page,
     totalDocs,
@@ -47,6 +51,7 @@ export const getProducts = async ({ limit = 10, page = 1, sort, query }) => {
     prevPage,
     nextPage,
     payload: productos,
+    
   };
 };
 
