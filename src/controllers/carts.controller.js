@@ -147,7 +147,7 @@ export const finalizarCompra = async (req = request, res = response) => {
         !productosNoDisponibles.includes(item.id._id || item.product) &&
         item.id.code // Asegurarse de que el código no es null
     );
-
+    
     if (validProducts.length === 0) {
       return res.status(400).json({ error: "No hay productos disponibles para la compra" });
     }
@@ -173,7 +173,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       (item) => !productosNoDisponibles.includes(item.id._id || item.product)
     );
     
-   
+  
     res.status(200).json({ productosNoDisponibles, ticketId: ticket._id });
   } catch (error) {
     console.error("Error al procesar la compra:", error);

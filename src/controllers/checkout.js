@@ -17,12 +17,13 @@ class CheckoutController {
       }
 
       const { name, lastName, email } = purchaser;
-
+      const user = req.session.user;
       res.render("checkout", {
         cliente: `${name} ${lastName}`,
         numTicket: ticket.code,
         email: email,
         amount: ticket.amount,
+        user
       });
     } catch (error) {
       console.error("Error al obtener el ticket:", error);

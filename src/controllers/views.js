@@ -28,12 +28,14 @@ export const chatView = (req, res) => {
 export const productsView = async (req, res) => {
   const user = req.session.user;
   const result = await ProductRepository.getProducts({ ...req.query });
-  console.log(result);
+  const cid= req.session.user.cart
+
   return res.render("products", {
     title: "productos",
     result,
     styles: "styles.css",
     user,
+    cid
   });
 };
 
@@ -41,6 +43,7 @@ export const cartView = async (req, res) => {
   const user = req.session.user;
   const { cid } = req.params;
   const carrito = await CartRepository.getCartById(cid);
+
   return res.render("cart", {
     title: "cart",
     carrito,
@@ -78,6 +81,7 @@ export const loginPostView = async (req, res) => {
     email: req.user.email,
     rol: req.user.rol,
     image: req.user.image,
+    cart: req.user.cart,
   };
   return res.redirect("/");
 };
