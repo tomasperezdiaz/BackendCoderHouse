@@ -166,14 +166,14 @@ export const finalizarCompra = async (req = request, res = response) => {
       })),
     });
 
-    await ticket.save();
+    await ticket.save()
 
 
     carrito.products = carrito.products.filter(
       (item) => !productosNoDisponibles.includes(item.id._id || item.product)
     );
     
-    await carrito.save();
+   
     res.status(200).json({ productosNoDisponibles, ticketId: ticket._id });
   } catch (error) {
     console.error("Error al procesar la compra:", error);

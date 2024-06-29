@@ -62,6 +62,7 @@
   
   <button onclick="vaciarCarrito('{{carrito._id}}')">Vaciar Carrito</button>
   <button onclick="finalizarCompra('{{carrito._id}}')">Finalizar Compra</button>
+  
   <h3>Total de la compra: ${{totalCompra}}</h3>
 
   <script>
@@ -112,6 +113,7 @@
       .then(data => {
         if (data.productosNoDisponibles && data.productosNoDisponibles.length > 0) {
           alert('Algunos productos no pudieron comprarse debido a falta de stock.');
+           window.location.href = `/checkout/${data.ticketId}`;
         } else {
           alert('Compra finalizada con éxito.');
           window.location.href = `/checkout/${data.ticketId}`;
