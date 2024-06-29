@@ -3,7 +3,7 @@ import { CartRepository, ProductRepository } from "../repositories/index.js";
 import { ticketModel } from "../dao/mongo/models/ticket.js";
 import { calcularTotal, generateUniqueCode } from "../utils/utili.js";
 import { userModel } from "../dao/mongo/models/user.js";
-import { cartModel } from "../dao/mongo/models/carts.js";
+
 
 
 export const getCartById = async (req = request, res = response) => {
@@ -93,8 +93,6 @@ export const deleteCart = async (req = request, res = response) => {
 export const finalizarCompra = async (req = request, res = response) => {
   const cid = req.params.cid;
   try {
-    console.log(`Iniciando proceso de compra para el carrito: ${cid}`);
-
     const carrito = await CartRepository.getCartById(cid);
     if (!carrito) {
       console.error("Carrito no encontrado");
@@ -102,18 +100,15 @@ export const finalizarCompra = async (req = request, res = response) => {
     }
 
     const products = carrito.products;
-    console.log(`Productos en el carrito: ${JSON.stringify(products)}`);
-
-    const productosNoDisponibles = [];
+    
+ const productosNoDisponibles = [];
 
     for (const item of products) {
       const productId = item.id._id || item.id;
-      console.log(`Verificando producto: ${productId}`);
+      
 
       const product = await ProductRepository.getProductsById(productId);
-      console.log(
-        `Producto obtenido de la base de datos: ${JSON.stringify(product)}`
-      );
+     
 
       if (!product) {
         console.error(`Producto no encontrado: ${productId}`);
@@ -134,11 +129,9 @@ export const finalizarCompra = async (req = request, res = response) => {
         productosNoDisponibles.push(productId);
       }
     }
-
-    const userWithCart = await userModel.findOne({cart:cid});
-    console.log(userWithCart)
-
-    if (!userWithCart) {
+const userWithCart = await userModel.findOne({cart:cid});
+   
+  if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
@@ -152,7 +145,7 @@ export const finalizarCompra = async (req = request, res = response) => {
       return res.status(400).json({ error: "No hay productos disponibles para la compra" });
     }
 
-    const ticket = new ticketModel({
+    const ticket =  new ticketModel({
       code: generateUniqueCode(),
       purchase_datetime: new Date(),
       amount: calcularTotal(validProducts),
@@ -168,8 +161,7 @@ export const finalizarCompra = async (req = request, res = response) => {
 
     await ticket.save()
 
-
-    carrito.products = carrito.products.filter(
+ carrito.products = carrito.products.filter(
       (item) => !productosNoDisponibles.includes(item.id._id || item.product)
     );
     
