@@ -6,6 +6,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 
+import checkoutRouter from "./routers/checkout.router.js";
 import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import sessionsRouter from "./routers/sessions.router.js"
@@ -15,6 +16,7 @@ import { dbConecction } from "./dataBase/config.js";
 import { messageModel } from "./dao/mongo/models/messages.js";
 import { initialPassport } from "./config/passport.js";
 import { ProductRepository } from "./repositories/index.js";
+
 
 
 const app = express();
@@ -49,6 +51,7 @@ app.use("/", views);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", sessionsRouter)
+app.use("/checkout", checkoutRouter )
 
 await dbConecction();
 

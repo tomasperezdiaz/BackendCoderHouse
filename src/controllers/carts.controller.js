@@ -3,6 +3,7 @@ import { CartRepository, ProductRepository } from "../repositories/index.js";
 import { ticketModel } from "../dao/mongo/models/ticket.js";
 import { calcularTotal, generateUniqueCode } from "../utils/utili.js";
 import { userModel } from "../dao/mongo/models/user.js";
+import { cartModel } from "../dao/mongo/models/carts.js";
 
 
 export const getCartById = async (req = request, res = response) => {
