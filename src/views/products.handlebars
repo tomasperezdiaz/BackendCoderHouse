@@ -49,6 +49,7 @@
           </td>
         </tr>
       {{/each}}
+    
     </tbody>
   </table>
 
@@ -74,7 +75,7 @@
    <script>
 
     function addProductInCart (id){
-     const cid = "667e45624de8420db1042047"
+     const cid = "667e48fe065f3a9d6be6f8e9"
         fetch(`/api/carts/${cid}/product/${id}`, {
         method:"POST",
         headers: {

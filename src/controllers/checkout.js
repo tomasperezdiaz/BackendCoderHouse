@@ -1,8 +1,9 @@
 import { ticketModel } from "../dao/mongo/models/ticket.js";
-import { userModel } from "../dao/mongo/models/user.js";
+import { request, response } from "express";
+
 
 class CheckoutController {
-    async viewCheckout(req, res) {
+    async viewCheckout(req = request, res = response) {
         const { ticketId } = req.params;
 
         try {

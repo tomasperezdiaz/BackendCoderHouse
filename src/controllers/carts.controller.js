@@ -134,31 +134,45 @@ export const finalizarCompra = async (req = request, res = response) => {
       }
     }
 
-    const userWithCart = await userModel.findOne(user.cart);
+    const userWithCart = await userModel.findOne({cart:cid});
+    console.log(userWithCart)
+
     if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    const validProducts = carrito.products.filter(
+      (item) =>
+        !productosNoDisponibles.includes(item.id._id || item.product) &&
+        item.id.code // Asegurarse de que el código no es null
+    );
+
+    if (validProducts.length === 0) {
+      return res.status(400).json({ error: "No hay productos disponibles para la compra" });
     }
 
     const ticket = new ticketModel({
       code: generateUniqueCode(),
       purchase_datetime: new Date(),
-      amount: calcularTotal(
-        carrito.products.filter(
-          (item) =>
-            !productosNoDisponibles.includes(item.id._id || item.product)
-        )
-      ),
+      amount: calcularTotal(validProducts),
       purchaser: userWithCart._id,
+      products: validProducts.map((item) => ({
+        productId: item.id._id,
+        title: item.id.title,
+        price: item.id.price,
+        quantity: item.quantity,
+        code: item.id.code // Asegurarse de que cada producto tenga un código
+      })),
     });
+
     await ticket.save();
 
-    // Excluir los productos no disponibles del carrito
-    carrito.products = carrito.products.filter(
-      (item) => !productosNoDisponibles.includes(item.product._id || item.product)
-    );
-    await carrito.save();
 
+    carrito.products = carrito.products.filter(
+      (item) => !productosNoDisponibles.includes(item.id._id || item.product)
+    );
+    
+    await carrito.save();
     res.status(200).json({ productosNoDisponibles, ticketId: ticket._id });
   } catch (error) {
     console.error("Error al procesar la compra:", error);

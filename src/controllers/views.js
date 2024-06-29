@@ -35,7 +35,7 @@ export const productsView = async (req, res) => {
     result,
     styles: "styles.css",
     user,
-    cartId,
+ 
   });
 };
 
