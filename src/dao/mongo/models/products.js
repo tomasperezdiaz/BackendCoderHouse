@@ -21,7 +21,7 @@ const ProductoSchema = new Schema({
   code: {
     type: String,
     required: [true, "El codigo del producto es obligatorio"],
-    unique: true,
+ 
   },
   stock: {
     type: Number,

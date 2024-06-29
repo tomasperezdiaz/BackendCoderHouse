@@ -5,7 +5,6 @@ const nameCollection = "Ticket";
 const TicketSchema = new mongoose.Schema({
   code: {
     type: String,
-    unique: true,
     required: true,
   },
   purchase_datetime: {
@@ -31,11 +30,6 @@ const TicketSchema = new mongoose.Schema({
   }]
 });
 
-// Crear índice parcial en el campo products.code
-TicketSchema.index(
-  { "products.code": 1 },
-  { unique: true, sparse: true } // Usar sparse: true para índice parcial
-);
 
 TicketSchema.set("toJSON", {
   transform: function (doc, ret) {

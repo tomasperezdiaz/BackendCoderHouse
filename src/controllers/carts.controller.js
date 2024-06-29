@@ -4,8 +4,6 @@ import { ticketModel } from "../dao/mongo/models/ticket.js";
 import { calcularTotal, generateUniqueCode } from "../utils/utili.js";
 import { userModel } from "../dao/mongo/models/user.js";
 
-
-
 export const getCartById = async (req = request, res = response) => {
   try {
     const { cid } = req.params;
@@ -100,15 +98,13 @@ export const finalizarCompra = async (req = request, res = response) => {
     }
 
     const products = carrito.products;
-    
- const productosNoDisponibles = [];
+
+    const productosNoDisponibles = [];
 
     for (const item of products) {
       const productId = item.id._id || item.id;
-      
 
       const product = await ProductRepository.getProductsById(productId);
-     
 
       if (!product) {
         console.error(`Producto no encontrado: ${productId}`);
@@ -129,23 +125,25 @@ export const finalizarCompra = async (req = request, res = response) => {
         productosNoDisponibles.push(productId);
       }
     }
-const userWithCart = await userModel.findOne({cart:cid});
-   
-  if (!userWithCart) {
+    const userWithCart = await userModel.findOne({ cart: cid });
+
+    if (!userWithCart) {
       console.error("Usuario con carrito no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
     const validProducts = carrito.products.filter(
       (item) =>
         !productosNoDisponibles.includes(item.id._id || item.product) &&
-        item.id.code // Asegurarse de que el código no es null
+        item.id.code
     );
-    
+
     if (validProducts.length === 0) {
-      return res.status(400).json({ error: "No hay productos disponibles para la compra" });
+      return res
+        .status(400)
+        .json({ error: "No hay productos disponibles para la compra" });
     }
 
-    const ticket =  new ticketModel({
+    const ticket = new ticketModel({
       code: generateUniqueCode(),
       purchase_datetime: new Date(),
       amount: calcularTotal(validProducts),
@@ -155,17 +153,17 @@ const userWithCart = await userModel.findOne({cart:cid});
         title: item.id.title,
         price: item.id.price,
         quantity: item.quantity,
-        code: item.id.code // Asegurarse de que cada producto tenga un código
+        code: item.id.code,
       })),
     });
 
-    await ticket.save()
+    await ticket.save();
 
- carrito.products = carrito.products.filter(
+    carrito.products = carrito.products.filter(
       (item) => !productosNoDisponibles.includes(item.id._id || item.product)
     );
     
-  
+
     res.status(200).json({ productosNoDisponibles, ticketId: ticket._id });
   } catch (error) {
     console.error("Error al procesar la compra:", error);
