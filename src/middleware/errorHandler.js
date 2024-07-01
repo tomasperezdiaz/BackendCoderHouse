@@ -7,10 +7,10 @@ const errorHandler = (error, req,res,next) => {
           return res.status(401).json({ error: `Credenciales incorrectas` });
     
         case ERROR_TYPES.INVALID_ARGUMENTS:
-          return res.status(400).json({ error: `${error.message}` });
+          return res.status(400).json({ error: `Argumentos invalidos` });
     
         case ERROR_TYPES.NOT_FOUND:
-          return res.status(404).json({ error: `${error.message}` });
+          return res.status(404).json({ error: `No se ha encontrado lo que se busca` });
     
         default:
           return res.status(500).json({ error: `Error - Contacte un admin` });

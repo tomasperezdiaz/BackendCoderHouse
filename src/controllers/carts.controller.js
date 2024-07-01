@@ -3,92 +3,129 @@ import { CartRepository, ProductRepository } from "../repositories/index.js";
 import { ticketModel } from "../dao/mongo/models/ticket.js";
 import { calcularTotal, generateUniqueCode } from "../utils/utili.js";
 import { userModel } from "../dao/mongo/models/user.js";
+import { CustomError } from "../utils/CustomError.js";
+import ERROR_TYPES from "../utils/EErrors.js";
 
-export const getCartById = async (req = request, res = response) => {
+export const getCartById = async (req = request, res = response, next) => {
   try {
     const { cid } = req.params;
     const carrito = await CartRepository.getCartById(cid);
 
     if (carrito) return res.json({ carrito });
 
-    return res.status(404).json({ msg: "El carrito con ese ID no existe" });
+    return CustomError.createError(
+      "ERROR",
+      null,
+      "Argumentos invalidos",
+      ERROR_TYPES.ARGUMENTOS_INVALIDOS
+    );
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error);
   }
 };
 
-export const createCart = async (req = request, res = response) => {
+export const createCart = async (req = request, res = response, next) => {
   try {
     let carrito = await CartRepository.createCart();
     return res.json({ msg: "Carrito creado", carrito });
   } catch (error) {
-    console.log("createCart ->", error);
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error);
   }
 };
 
-export const addProductInCart = async (req = request, res = response) => {
+export const addProductInCart = async (req = request, res = response, next) => {
   try {
     const { cid, id } = req.params;
 
     const carrito = await CartRepository.addProductInCart(cid, id);
 
-    if (!carrito)
-      return res.status(404).json({ msg: "El carrito con ese ID no existe" });
-
+    if (!carrito) {
+      return CustomError.createError(
+        "Unfilled fields",
+        null,
+        "Check unfilled fields",
+        ERROR_TYPES.ARGUMENTOS_INVALIDOS
+      );
+    }
     return res.json({ msg: "Carrito actualizado", carrito });
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con adminsss" });
+    next(error);
   }
 };
 
-export const deleteProductInCart = async (req = request, res = response) => {
+export const deleteProductInCart = async (
+  req = request,
+  res = response,
+  next
+) => {
   try {
     const { cid, id } = req.params;
     const carrito = await CartRepository.deleteProductInCart(cid, id);
     if (!carrito)
-      return res.status(404).json({ msg: "No se pudo realizar la operacion" });
+      return CustomError.createError(
+        "Error",
+        null,
+        "Internal server Error",
+        ERROR_TYPES.INTERNAL_SERVER_ERROR
+      );
     return res.json({ msg: "Producto eliminado del carrito", carrito });
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error);
   }
 };
 
-export const updateProductInCart = async (req = request, res = response) => {
+export const updateProductInCart = async (
+  req = request,
+  res = response,
+  next
+) => {
   try {
     const { cid, id } = req.params;
     const { quantity } = req.body;
 
     if (!quantity || !Number.isInteger(quantity))
-      return res.status(404).json({
-        msg: "La propiedad quantity es obligatoria y debe ser un numero entero",
-      });
+      return CustomError.createError(
+        "ERROR",
+        null,
+        "Enter a valid Mongo ID",
+        ERROR_TYPES.ARGUMENTOS_INVALIDOS
+      );
 
     const carrito = await CartRepository.updateProductInCart(cid, id, quantity);
     console.log(carrito);
     if (!carrito)
-      return res.status(404).json({ msg: "No se pudo realizar la operacion" });
+      return CustomError.createError(
+        "Error",
+        null,
+        "Internal server Error",
+        ERROR_TYPES.INTERNAL_SERVER_ERROR
+      );
 
     return res.json({ msg: "Producto actualizado", carrito });
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error);
   }
 };
 
-export const deleteCart = async (req = request, res = response) => {
+export const deleteCart = async (req = request, res = response, next) => {
   try {
     const { cid } = req.params;
 
     const carrito = await CartRepository.deleteCart(cid);
     if (!carrito)
-      return res.status(404).json({ msg: "No se pudo realizar la operacion" });
+      return CustomError.createError(
+        "ERROR",
+        null,
+        "Enter a valid Mongo ID",
+        ERROR_TYPES.ARGUMENTOS_INVALIDOS
+      );
     return res.json({ msg: "Producto actualizado", carrito });
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error);
   }
 };
 
-export const finalizarCompra = async (req = request, res = response) => {
+export const finalizarCompra = async (req = request, res = response, next) => {
   const cid = req.params.cid;
   try {
     const carrito = await CartRepository.getCartById(cid);
@@ -162,11 +199,9 @@ export const finalizarCompra = async (req = request, res = response) => {
     carrito.products = carrito.products.filter(
       (item) => !productosNoDisponibles.includes(item.id._id || item.product)
     );
-    
 
     res.status(200).json({ productosNoDisponibles, ticketId: ticket._id });
   } catch (error) {
-    console.error("Error al procesar la compra:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    next(error);
   }
 };

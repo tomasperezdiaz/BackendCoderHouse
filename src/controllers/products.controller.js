@@ -1,70 +1,89 @@
 import { request, response } from "express";
 import { ProductRepository } from "../repositories/index.js";
+import { CustomError } from "../utils/CustomError.js";
+import ERROR_TYPES from "../utils/EErrors.js";
 
 
 
-export const getProducts = async (req = request, res = response) => {
+
+export const getProducts = async (req = request, res = response, next) => {
   try {
     const result = await ProductRepository.getProducts({ ...req.query });
     return res.json({ result });
   } catch (error) {
-    console.log("getProducts ->", error);
-    return res.status(500).json({ msg: "Hablar con admin" });
+   next(error)
   }
 };
 
-export const getProductsById = async (req = request, res = response) => {
+export const getProductsById = async (req = request, res = response, next) => {
   try {
     const { id } = req.params;
     const producto = await ProductRepository.getProductsById(id);
 
     if (!producto)
-      return res.status(404).json({ msg: "El producto con ese ID no existe" });
+      return CustomError.createError(
+        "ERROR",
+        null,
+        "Enter a valid Mongo ID",
+        ERROR_TYPES.ARGUMENTOS_INVALIDOS
+      );
     return res.json({ producto });
   } catch (error) {
-    console.log("getProductsById ->", error);
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error)
   }
 };
 
-export const addProduct = async (req = request, res = response) => {
+export const addProduct = async (req = request, res = response, next) => {
   try {
     const { title, description, code, price, stock, category } = req.body;
     
     if ((!title, !description, !code, !price, !stock, !category))
-      return res.status(404).json({
-        msg: "Los campos [title,description,code,price,stock,category] son obligatorios ",
-      });
+      return CustomError.createError(
+        "ERROR",
+        null,
+        "Enter a valid Mongo ID",
+        ERROR_TYPES.ARGUMENTOS_INVALIDOS
+      )
 
     const producto = await ProductRepository.addProduct({ ...req.body });
     return res.json({ producto });
 
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error)
   }
 };
 
-export const updateProduct = async (req = request, res = response) => {
+export const updateProduct = async (req = request, res = response, next) => {
   try {
     const { id } = req.params;
     const { _id, ...rest } = req.body;
     const producto = await ProductRepository.updateProduct(id, rest);
     if (producto) return res.json({ msg: "Producto actualizado", producto });
-    return res.status(404).json({ msg: "El producto no se pudo actualizar" });
+    return CustomError.createError(
+      "ERROR",
+      null,
+      "Enter a valid Mongo ID",
+      ERROR_TYPES.ARGUMENTOS_INVALIDOS
+    );
   } catch (error) {
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error)
   }
 };
 
-export const deleteProduct = async (req = request, res = response) => {
+export const deleteProduct = async (req = request, res = response, next) => {
   try {
     const { id } = req.params;
     const producto = await ProductRepository.deleteProduct(id);
     if (producto) return res.json({ msg: "Producto eliminado", producto });
-    return res.status(404).json({ msg: "El producto no se pudo eliminar" });
+    
+    return CustomError.createError(
+      "ERROR",
+      null,
+      "Enter a valid Mongo ID",
+      ERROR_TYPES.ARGUMENTOS_INVALIDOS
+    );
   } catch (error) {
-    console.log("deleteProduct ->", error);
-    return res.status(500).json({ msg: "Hablar con admin" });
+    next(error);
   }
 };
 

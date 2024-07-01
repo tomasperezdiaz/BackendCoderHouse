@@ -1,19 +1,32 @@
 import { ticketModel } from "../dao/mongo/models/ticket.js";
 import { request, response } from "express";
+import { CustomError } from "../utils/CustomError.js";
+import ERROR_TYPES from "../utils/EErrors.js";
+
 
 class CheckoutController {
-  async viewCheckout(req = request, res = response) {
+  async viewCheckout(req = request, res = response, next) {
     const { ticketId } = req.params;
 
     try {
       const ticket = await ticketModel.findById(ticketId).populate("purchaser");
       if (!ticket) {
-        return res.status(404).send("Ticket no encontrado");
+        return CustomError.createError(
+          "ERROR",
+          null,
+          "Enter a valid Mongo ID",
+          ERROR_TYPES.ARGUMENTOS_INVALIDOS
+        );
       }
 
       const { purchaser } = ticket;
       if (!purchaser) {
-        return res.status(404).send("Usuario no encontrado");
+        return CustomError.createError(
+          "ERROR",
+          null,
+          "Enter a valid Mongo ID",
+          ERROR_TYPES.ARGUMENTOS_INVALIDOS
+        );
       }
 
       const { name, lastName, email } = purchaser;
@@ -26,8 +39,7 @@ class CheckoutController {
         user
       });
     } catch (error) {
-      console.error("Error al obtener el ticket:", error);
-      res.status(500).send("Error interno del servidor");
+     next(error)
     }
   }
 }
