@@ -94,16 +94,7 @@ export const logOut = async (req, res) => {
 };
 
 export const profile = async (req, res) => {
-  try {
-    const userDto = new UserDTO(
-      req.user.name,
-      req.user.lastName,
-      res.user.role
-    );
-    const isAdmin = req.user.role === "admin";
-
-    res.render("profile", { user: userDto, isAdmin });
-  } catch (error) {
-    res.status(500).send("Error en el servidor");
-  }
+  let user = new UserDTO(req.session.user);
+  let cart = { _id: req.session.user.cart };
+  res.render("profile", { user, cart });
 };

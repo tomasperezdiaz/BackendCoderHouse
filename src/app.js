@@ -18,6 +18,8 @@ import { messageModel } from "./dao/mongo/models/messages.js";
 import { initialPassport } from "./config/passport.js";
 import { ProductRepository } from "./repositories/index.js";
 
+import  errorHandler  from "./middleware/errorHandler.js";
+
 
 
 const app = express();
@@ -90,3 +92,6 @@ io.on("connection", async (socket) => {
 
   socket.broadcast.emit("nuevo_user");
 });
+
+
+app.use(errorHandler)
