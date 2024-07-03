@@ -3,7 +3,6 @@ import { request, response } from "express";
 import { CustomError } from "../utils/CustomError.js";
 import ERROR_TYPES from "../utils/EErrors.js";
 
-
 class CheckoutController {
   async viewCheckout(req = request, res = response, next) {
     const { ticketId } = req.params;
@@ -18,7 +17,7 @@ class CheckoutController {
           ERROR_TYPES.ARGUMENTOS_INVALIDOS
         );
       }
-
+      const cid = req.session.user.cart;
       const { purchaser } = ticket;
       if (!purchaser) {
         return CustomError.createError(
@@ -36,10 +35,11 @@ class CheckoutController {
         numTicket: ticket.code,
         email: email,
         amount: ticket.amount,
-        user
+        user,
+        cid,
       });
     } catch (error) {
-     next(error)
+      next(error);
     }
   }
 }
