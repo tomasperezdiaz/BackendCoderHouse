@@ -16,15 +16,30 @@
         <p>Bienvenido, {{user.email}}</p>
         
         {{#if user.image}}
+        
+       
           <div class="profile-picture">
             <img src="{{user.image}}" alt="Perfil de usuario" />
           </div>
         {{/if}}
+         <a href="/"><button>Inicio</button></a>
+        <a href="/products"><button>Productos</button></a>
+        <a href="/cart/{{cid}}"><button>Carrito</button></a>
+        <a href="/chat"><button>Chat</button></a>
+       <a href="/realTimeProducts"><button>Cargar productos</button></a>
+       <a href="/profile"><button>Perfil</button></a>
         <a href="/logout"><button>Cerrar sesion</button></a>
       {{else}}
         <a href="/login"> <button>Iniciar sesion</button></a>
         <a href="/register"><button>Registrarte</button></a>
       {{/if}}
+
+
+    
+    
+
+
+     
     </nav>
   </div>
 </header>

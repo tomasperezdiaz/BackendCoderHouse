@@ -7,35 +7,43 @@ export const homeView = async (req = request, res = response) => {
   const { payload } = await ProductRepository.getProducts({ limit });
 
   const user = req.session.user;
+  let cid = null;
+
+  if (user) {
+    cid = user.cart;
+  }
   return res.render("home", {
     product: payload,
     styles: "styles.css",
     title: "Inicio",
     user,
+    cid,
   });
 };
 
 export const realTimeProductsView = async (req = request, res = response) => {
+  const cid = req.session.user.cart;
   const user = req.session.user;
-  return res.render("realTimeProducts", { styles: "styles.css", user });
+  return res.render("realTimeProducts", { styles: "styles.css", user, cid });
 };
 
 export const chatView = (req, res) => {
   const user = req.session.user;
-  return res.render("chat", { styles: "styles.css", user });
+  const cid = req.session.user.cart;
+  return res.render("chat", { styles: "styles.css", user, cid });
 };
 
 export const productsView = async (req, res) => {
   const user = req.session.user;
   const result = await ProductRepository.getProducts({ ...req.query });
-  const cid= req.session.user.cart
+  const cid = req.session.user.cart;
 
   return res.render("products", {
     title: "productos",
     result,
     styles: "styles.css",
     user,
-    cid
+    cid,
   });
 };
 

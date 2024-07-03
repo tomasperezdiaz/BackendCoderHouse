@@ -162,6 +162,7 @@ export const finalizarCompra = async (req = request, res = response, next) => {
         productosNoDisponibles.push(productId);
       }
     }
+   
     const userWithCart = await userModel.findOne({ cart: cid });
 
     if (!userWithCart) {
