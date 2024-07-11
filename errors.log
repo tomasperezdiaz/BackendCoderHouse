@@ -1,0 +1,4 @@
+info: Mensaje de Info
+warning: Mensaje de Warning
+error: Mensaje de Error
+fatal: Mensaje de Error Fatal

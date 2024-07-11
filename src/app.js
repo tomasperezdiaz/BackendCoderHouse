@@ -1,16 +1,16 @@
 import express from "express";
 import { Server, Socket } from "socket.io";
 import { engine } from "express-handlebars";
-import 'dotenv/config';
+import "dotenv/config";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 
-import mockingRouter from "./routers/mocking.router.js"
+import mockingRouter from "./routers/mocking.router.js";
 import checkoutRouter from "./routers/checkout.router.js";
 import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
-import sessionsRouter from "./routers/sessions.router.js"
+import sessionsRouter from "./routers/sessions.router.js";
 import views from "./routers/views.js";
 import __dirname from "./utils.js";
 import { dbConecction } from "./dataBase/config.js";
@@ -18,12 +18,13 @@ import { messageModel } from "./dao/mongo/models/messages.js";
 import { initialPassport } from "./config/passport.js";
 import { ProductRepository } from "./repositories/index.js";
 
-import  errorHandler  from "./middleware/errorHandler.js";
-
-
+import errorHandler from "./middleware/errorHandler.js";
+import  newLogger  from "./middleware/logger.js";
+import  loggerRouter  from "./routers/logger.router.js";
 
 const app = express();
 const PORT = process.env.PORT;
+app.use(newLogger);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,8 +33,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl:
-        process.env.URI_MONGO_DB,
+      mongoUrl: process.env.URI_MONGO_DB,
       ttl: 3600,
     }),
     secret: "StrikeOne",
@@ -53,9 +53,10 @@ app.set("views", __dirname + "/views");
 app.use("/", views);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/", sessionsRouter)
-app.use("/checkout", checkoutRouter )
-app.use("/mockingproducts", mockingRouter)
+app.use("/", sessionsRouter);
+app.use("/checkout", checkoutRouter);
+app.use("/mockingproducts", mockingRouter);
+app.use("/loggertest", loggerRouter);
 
 await dbConecction();
 
@@ -93,5 +94,4 @@ io.on("connection", async (socket) => {
   socket.broadcast.emit("nuevo_user");
 });
 
-
-app.use(errorHandler)
+app.use(errorHandler);
