@@ -15,13 +15,14 @@ const ProductoSchema = new Schema({
     type: Number,
     required: [true, "El precio del producto es obligatorio"],
   },
-  thumbnail: [{
-    type: String,
-  }],
+  thumbnail: [
+    {
+      type: String,
+    },
+  ],
   code: {
     type: String,
     required: [true, "El codigo del producto es obligatorio"],
- 
   },
   stock: {
     type: Number,
@@ -35,13 +36,17 @@ const ProductoSchema = new Schema({
     type: String,
     required: [true, "La categoria del producto es obligatorio"],
   },
+  owner: {
+    type: String,
+    default: "admin",
+  },
 });
 
 ProductoSchema.set("toJSON", {
-  transform: function(doc,ret){
+  transform: function (doc, ret) {
     delete ret.__v;
-    return ret
-  }
-})
+    return ret;
+  },
+});
 
 export const productoModel = model(nameCollection, ProductoSchema);

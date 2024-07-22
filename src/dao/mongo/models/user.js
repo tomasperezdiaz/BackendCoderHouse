@@ -11,7 +11,7 @@ const UserSchema = new Schema({
     unique: true,
   },
   password: { type: String, required: [true, "La constaseña es obligatorio"] },
-  rol: { type: String, default: "user", enum: ["user", "admin"] },
+  rol: { type: String, default: "user", enum: ["user", "admin", "premium"] },
   status: { type: Boolean, default: true },
   fechaCreacion: { type: Date, default: Date.now },
   image: { type: String },
