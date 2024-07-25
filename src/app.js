@@ -6,6 +6,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 
+import passwordRouter from "./routers/passwordReset.router.js"
+import userRouter from "./routers/user.router.js"
 import mockingRouter from "./routers/mocking.router.js";
 import checkoutRouter from "./routers/checkout.router.js";
 import productsRouter from "./routers/products.router.js";
@@ -57,6 +59,8 @@ app.use("/", sessionsRouter);
 app.use("/checkout", checkoutRouter);
 app.use("/mockingproducts", mockingRouter);
 app.use("/loggertest", loggerRouter);
+app.use("api/user", userRouter)
+app.use("/", passwordRouter);
 
 await dbConecction();
 
