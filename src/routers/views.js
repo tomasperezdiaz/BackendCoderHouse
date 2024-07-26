@@ -8,15 +8,15 @@ import {
   realTimeProductsView,
 } from "../controllers/views.js";
 import { auth } from "../middleware/auth.js";
-import role from "../middleware/role.js";
+
 
 const router = Router();
 
 router.get("/", homeView);
-router.get("/realtimeproducts", role(["admin"]), realTimeProductsView);
-router.get("/chat", role(["user"]), chatView);
-router.get("/products", auth, productsView);
-router.get("/cart/:cid", auth, cartView);
-router.get("/profile" , auth,  profile);
+router.get("/realtimeproducts", auth(["admin"]), realTimeProductsView);
+router.get("/chat", auth(["user"]), chatView);
+router.get("/products", auth(["user", "premium", "admin"]), productsView);
+router.get("/cart/:cid", auth(["user", "premium", "admin"]), cartView);
+router.get("/profile", auth(["user", "premium", "admin"]), profile);
 
 export default router;

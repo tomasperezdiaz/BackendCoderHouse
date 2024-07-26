@@ -8,13 +8,13 @@ import {
   getCartById,
   updateProductInCart,
 } from "../controllers/carts.controller.js";
-import role from "../middleware/role.js";
+import { auth } from "../middleware/auth.js";
 
 const router = Router();
 
 router.get("/:cid", getCartById);
 router.post("/", createCart);
-router.post("/:cid/product/:id", role(["user", "premium"]), addProductInCart);
+router.post("/:cid/product/:id", auth(["user", "premium"]), addProductInCart);
 router.delete("/:cid/product/:id", deleteProductInCart);
 router.delete("/:cid", deleteCart);
 router.put("/:cid/product/:id", updateProductInCart);
