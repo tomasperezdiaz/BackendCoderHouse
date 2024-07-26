@@ -64,7 +64,6 @@ export const addProduct = async ({
   stock,
   category,
   status,
-  owner,
 }) => {
   return await productoModel.create({
     title,
@@ -75,7 +74,6 @@ export const addProduct = async ({
     stock,
     category,
     status,
-    owner,
   });
 };
 

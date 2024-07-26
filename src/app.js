@@ -6,8 +6,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 
-import passwordRouter from "./routers/passwordReset.router.js"
-import userRouter from "./routers/user.router.js"
+import passwordRouter from "./routers/passwordReset.router.js";
+import userRouter from "./routers/user.router.js";
 import mockingRouter from "./routers/mocking.router.js";
 import checkoutRouter from "./routers/checkout.router.js";
 import productsRouter from "./routers/products.router.js";
@@ -21,8 +21,8 @@ import { initialPassport } from "./config/passport.js";
 import { ProductRepository } from "./repositories/index.js";
 
 import errorHandler from "./middleware/errorHandler.js";
-import  newLogger  from "./middleware/logger.js";
-import  loggerRouter  from "./routers/logger.router.js";
+import newLogger from "./middleware/logger.js";
+import loggerRouter from "./routers/logger.router.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -59,7 +59,7 @@ app.use("/", sessionsRouter);
 app.use("/checkout", checkoutRouter);
 app.use("/mockingproducts", mockingRouter);
 app.use("/loggertest", loggerRouter);
-app.use("api/user", userRouter)
+app.use("/api/user", userRouter);
 app.use("/", passwordRouter);
 
 await dbConecction();
@@ -76,7 +76,11 @@ io.on("connection", async (socket) => {
   socket.emit("product", payload);
 
   socket.on("agregarProducto", async (products) => {
-    const newProduct = await ProductRepository.addProduct({ ...products });
+ 
+    const newProduct = await ProductRepository.addProduct({
+      ...products,
+      owner,
+    });
     console.log({ products });
     if (newProduct) {
       product.push(newProduct);

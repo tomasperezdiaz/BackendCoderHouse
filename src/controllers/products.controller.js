@@ -41,7 +41,7 @@ export const addProduct = async (req = request, res = response, next) => {
         "Enter a valid Mongo ID",
         ERROR_TYPES.ARGUMENTOS_INVALIDOS
       );
-   
+
     const producto = await ProductRepository.addProduct({ ...req.body, owner });
     return res.json({ producto });
   } catch (error) {
