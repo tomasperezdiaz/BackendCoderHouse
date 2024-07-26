@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/", getProducts );
 router.get("/:id", getProductsById);
-router.post("/",auth(["admin"]), addProduct);
+router.post("/",auth(["admin", "premium"]), addProduct);
 router.put("/:id",auth(["admin"]), updateProduct);
 router.delete("/:id",auth(["admin", "premium"]), deleteProduct);
 

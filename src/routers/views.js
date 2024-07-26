@@ -13,7 +13,7 @@ import { auth } from "../middleware/auth.js";
 const router = Router();
 
 router.get("/", homeView);
-router.get("/realtimeproducts", auth(["admin"]), realTimeProductsView);
+router.get("/realtimeproducts", auth(["admin", "premium"]), realTimeProductsView);
 router.get("/chat", auth(["user"]), chatView);
 router.get("/products", auth(["user", "premium", "admin"]), productsView);
 router.get("/cart/:cid", auth(["user", "premium", "admin"]), cartView);
