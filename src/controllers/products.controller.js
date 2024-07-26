@@ -82,6 +82,7 @@ export const deleteProduct = async (req = request, res = response, next) => {
       "Enter a valid Mongo ID",
       ERROR_TYPES.ARGUMENTOS_INVALIDOS
     );
+    
   } catch (error) {
     next(error);
   }
