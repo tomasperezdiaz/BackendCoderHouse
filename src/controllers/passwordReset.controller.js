@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { userModel } from "../dao/mongo/models/user.js";
-import { createHash, isValidPass } from "../utils/bcryptPassword.js";
+import { createHash, createHashs, isValidPass, validatePasswordd } from "../utils/bcryptPassword.js";
 import { sendResetPassword } from "../utils/mailing.js";
 import { CustomError } from "../utils/CustomError.js";
 import { ERROR_TYPES } from "../utils/EErrors.js";
@@ -83,7 +83,7 @@ export const updatePassword = async (req, res) => {
       );
     }
 
-    const isSame = isValidPass(newPassword, user);
+    const isSame = validatePasswordd(newPassword, user);
     if (isSame) {
       return CustomError.createError(
         "ERROR",
@@ -92,9 +92,9 @@ export const updatePassword = async (req, res) => {
         ERROR_TYPES.ARGUMENTOS_INVALIDOS
       );
     }
-    console.log(isSame);
+    
 
-    const hash = createHash(newPassword);
+    const hash = createHashs(newPassword);
     user.password = hash;
     console.log(hash);
     await user.save();
