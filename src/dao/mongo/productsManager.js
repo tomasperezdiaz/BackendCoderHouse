@@ -31,7 +31,6 @@ export const getProducts = async ({ limit = 10, page = 1, sort, query }) => {
     productoModel.countDocuments(query),
   ]);
 
-
   const totalPages = Math.ceil(totalDocs / limit);
   const hasNextPage = page < totalPages;
   const hasPrePage = page > 1;
@@ -49,7 +48,6 @@ export const getProducts = async ({ limit = 10, page = 1, sort, query }) => {
     prevPage,
     nextPage,
     payload: productos,
-    
 
     //Tengo que pasar el parmetro del carro para aca, asi la busqueda en handlebars es mas facil, hacer mañana y despues con eso fijarse como hacer lo del ticket
   };
@@ -66,6 +64,7 @@ export const addProduct = async ({
   stock,
   category,
   status,
+  owner,
 }) => {
   return await productoModel.create({
     title,
@@ -76,6 +75,7 @@ export const addProduct = async ({
     stock,
     category,
     status,
+    owner,
   });
 };
 

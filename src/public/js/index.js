@@ -1,7 +1,6 @@
 const socket = io();
 
 socket.on("product", (product) => {
-
   const tbody = document.getElementById("productosBody");
   tbody.innerHTML = "";
 
@@ -17,7 +16,8 @@ socket.on("product", (product) => {
     <td>${product.code}</td>
     <td>${product.stock}</td>
     <td>${product.status ? "Activo" : "Desactivado"}</td>
-    <td> ${product.category}</td>`;
+    <td> ${product.category}</td>
+    <td> ${product.owner}</td>`;
   });
 });
 
@@ -33,6 +33,7 @@ formulario.addEventListener("submit", function (e) {
   const stock = document.getElementById("stock").value;
   const categoria = document.getElementById("categoria").value;
 
+  
   const product = {
     title: titulo,
     description: description,
@@ -40,10 +41,10 @@ formulario.addEventListener("submit", function (e) {
     code: codigo,
     stock: stock,
     category: categoria,
+    
   };
 
   socket.emit("agregarProducto", product);
-  
 
-  formulario.reset()
+  formulario.reset();
 });
