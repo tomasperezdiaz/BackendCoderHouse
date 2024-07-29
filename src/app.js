@@ -5,6 +5,8 @@ import "dotenv/config";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
+import swaggerUI from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 
 import passwordRouter from "./routers/passwordReset.router.js";
 import userRouter from "./routers/user.router.js";
@@ -31,6 +33,22 @@ app.use(newLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Ecommerce Coderhouse",
+      version: "1.0.0",
+      description:
+        "Documentacion del proyecto ecommerce del curso de CoderHouse",
+    },
+  },
+  apis: ["./src/docs/*.yaml"],
+};
+
+const spec = swaggerJSDoc(options);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(spec));
 
 app.use(
   session({
@@ -76,7 +94,6 @@ io.on("connection", async (socket) => {
   socket.emit("product", payload);
 
   socket.on("agregarProducto", async (products) => {
- 
     const newProduct = await ProductRepository.addProduct({
       ...products,
       owner,
