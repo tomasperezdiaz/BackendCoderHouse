@@ -1,1 +1,160 @@
-
+paths:
+  /api/carts/:cid:
+    get:
+      summary: Retorna una lista de carritos
+      tags:
+        - Carritos
+      description: Este endpoint trae la lista de carritos del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    delete:
+      summary: Borra el carrito seleccionado
+      tags:
+        - Carritos
+      description: Este endpoint borra el carrito seleccionado del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/carts:
+    post:
+      summary: Crea un carrito
+      tags:
+        - Carritos
+      description: Este endpoint crea un carrito del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/carts/:cid/product/:id:
+    post:
+      summary: Agrega un producto al carrito
+      tags:
+        - Carritos
+      description: Este endpoint agrega un producto al carrito del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    delete:
+      summary: Borra un producto del carrito
+      tags:
+        - Carritos
+      description: Este endpoint borra un producto del carrito del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    put:
+      summary: Actualiza los productos de un carrito
+      tags:
+        - Carritos
+      description: Este endpoint actualiza los productos de un carrito del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/carts/:cid/purchase:
+   post:
+      summary: Finaliza la compra
+      tags:
+        - Carritos
+      description: Este endpoint finaliza la compra del carrito del ecommerce
+      responses:
+        "200":
+          description: JSON array carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string                  
+ 

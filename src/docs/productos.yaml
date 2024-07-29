@@ -22,4 +22,99 @@ paths:
                 type: array
                 items:
                   type: string
-              
+    post:
+      summary: Agrega un producto
+      tags:
+        - Productos
+      description: Este endpoint sube un producto
+      responses:
+        "200":
+          description: Producto agregado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+  /api/products/{id}:
+    get:
+      summary: Retorna un producto por ID
+      tags:
+        - Productos
+      description: Este endpoint trae un producto específico del ecommerce por ID
+      responses:
+        "200":
+          description: Información del producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      summary: Actualiza un producto por ID
+      tags:
+        - Productos
+      description: Este endpoint actualiza un producto específico del ecommerce por ID
+      responses:
+        "200":
+          description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      summary: Borra un producto
+      tags:
+        - Productos
+      description: Este endpoint borra un producto del ecommerce por ID
+      responses:
+        "200":
+          description: Producto borrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
