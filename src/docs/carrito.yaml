@@ -89,8 +89,6 @@ paths:
       tags:
         - Carritos
       description: Este endpoint agrega un producto al carrito 
-      security:
-        - BasicAuth: []
       parameters:
         - name: cid
           in: path
