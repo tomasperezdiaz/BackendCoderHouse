@@ -13,17 +13,78 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                type: object
+                properties: 
+                  result:
+                    type: object
+                    properties:
+                      page: 
+                        type: string
+                        example: "1"
+                      totalDocs:
+                        type: string
+                        example: "20"
+                      totalPages:
+                        type: string
+                        example: "2"
+                      limit:
+                        type: string
+                        example: "10"
+                      hasNextPage:
+                        type: string
+                        example: "true"
+                      hasPrevPage:
+                        type: string
+                        example: "false"
+                      prevPage:
+                        type: string
+                        example: "null"
+                      nextPage:
+                        type: string
+                        example: "2"
+                      payload:
+                        type: array
+                        items: 
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: "667ac9aea005ec71302d0e43"
+                            title:
+                              type: string
+                              example: "Manzana"
+                            description:
+                              type: string
+                              example: "Fruta roja"
+                            price:
+                              type: string
+                              example: "1000"
+                            thumbnail:
+                              type: string
+                              example: "[]"
+                            code:
+                              type: string
+                              example: "1"
+                            stock:
+                              type: string
+                              example: "1"
+                            status:
+                              type: string
+                              example: "true"
+                            category:
+                              type: string
+                              example: "Fruta"
+                            __V:
+                              type: string
+                              example: "0"
+        "400":
+          description: "Request invalido"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf: 
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
     post:
       summary: Agrega un producto
       tags:
@@ -41,6 +102,14 @@ paths:
                     type: string
                   name:
                     type: string
+        "400":
+          description: "Request invalido"
+          content:
+            application/json:
+              schema:
+                oneOf: 
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
   /api/products/{id}:
     get:
       summary: Retorna un producto por ID
@@ -62,19 +131,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
-        "404":
-          description: Error
+                  producto:
+                    $ref: "#/components/schemas/producto" 
+        "400":
+          description: "Request invalido"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                oneOf: 
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
     put:
       summary: Actualiza un producto por ID
       tags:
@@ -99,15 +165,14 @@ paths:
                     type: string
                   name:
                     type: string
-        "404":
-          description: Error
+        "400":
+          description: "Request invalido"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                oneOf: 
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
     delete:
       summary: Borra un producto
       tags:
@@ -128,21 +193,64 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
-        "404":
-          description: Error
+                  producto:
+                    $ref: "#/components/schemas/producto"               
+        "400":
+          description: "Request invalido"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                oneOf: 
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
 components:
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
+  schemas:
+    producto:
+      type: object
+      properties:
+        owner:
+          type: string
+          example: "admin"
+        _id:
+          type: string
+          example: "667ac9aea005ec71302d0e43"
+        title:
+          type: string
+          example: "Manzana"
+        description:
+          type: string
+          example: "Fruta roja"
+        price:
+          type: string
+          example: "1000"
+        thumbnail:
+          type: string
+          example: "[]"
+        code:
+          type: string
+          example: "1"
+        stock:
+          type: string
+          example: "1"
+        status:
+          type: string
+          example: "true"
+        category:
+          type: string
+          example: "Fruta"
+    error1:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: "Complete email y password"
+    error2:
+      type: object
+      properties: 
+        error:
+          type: string
+          description: "Argumentos inválidos"
