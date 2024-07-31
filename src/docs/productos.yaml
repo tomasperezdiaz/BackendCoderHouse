@@ -165,7 +165,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/producto"
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "Producto actualizado"
+                  producto:
+                    $ref: "#/components/schemas/producto" 
         "400":
           description: "Request invalido"
           content:
@@ -194,6 +200,9 @@ paths:
               schema:
                 type: object
                 properties:
+                  msg:
+                    type: string
+                    example: "Producto eliminado"
                   producto:
                     $ref: "#/components/schemas/producto"               
         "400":
