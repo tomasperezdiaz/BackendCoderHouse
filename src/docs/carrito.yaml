@@ -1,10 +1,10 @@
 paths:
   /api/carts/{cid}:
     get:
-      summary: Devulve el carrito con el ID solicitado
+      summary: Devuelve el carrito con el ID solicitado
       tags:
         - Carritos
-      description: Este endpoint devuelve el carrito conel ID seleccionado
+      description: Este endpoint devuelve el carrito con el ID seleccionado
       security:
         - BasicAuth: []
       parameters:
@@ -16,21 +16,22 @@ paths:
           description: ID del carrito
       responses:
         "200":
-          description: JSON array carritos
+          description: Información del carrito
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: object
+                properties:
+                  carrito:
+                    $ref: "#/components/schemas/carrito"
         "400":
-          description: Error
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
     delete:
       summary: Borra los productos del ID del carrito seleccionado
       tags:
@@ -49,17 +50,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                $ref: "#/components/schemas/carritoNuevo"
+        "400":
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
   /api/carts:
     post:
       summary: Crea un carrito
@@ -72,17 +71,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                $ref: "#/components/schemas/carritoNuevo"
+        "400":
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
   /api/carts/{cid}/product/{id}:
     post:
       summary: Agrega un producto al carrito
@@ -108,17 +105,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                $ref: "#/components/schemas/carritoNuevo"
+        "400":
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
     delete:
       summary: Borra un producto del carrito
       tags:
@@ -143,22 +138,26 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                $ref: "#/components/schemas/carritoEliminado"
+        "400":
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
     put:
       summary: Actualiza la cantidad de un producto del carrito seleccionado
       tags:
         - Carritos
       description: Este endpoint actualiza la cantidad de un producto del carrito seleccionado
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/requestBodies/cambiarQuantity"
       parameters:
         - name: cid
           in: path
@@ -174,21 +173,22 @@ paths:
           description: ID del producto
       responses:
         "200":
-          description: JSON array carritos
+          description: Información del carrito
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                type: object
+                properties:
+                  carrito:
+                    $ref: "#/components/schemas/carritoQuantity"
+        "400":
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"
   /api/carts/{cid}/purchase:
    post:
       summary: Finaliza la compra
@@ -208,19 +208,153 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Error
+                type: object
+                properties:
+                  productosNoDisponible:
+                    type: string
+                    example: "[]"
+                  ticket: 
+                    type: string
+                    example: "66aa92d013b0c02a0b69eb46"         
+        "400":
+          description: Error en la solicitud
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string                  
+                oneOf:
+                  - $ref: "#/components/schemas/error1"
+                  - $ref: "#/components/schemas/error2"                 
 components:
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
+  schemas:
+    carrito:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "66a3fc9a931257c40e84583a"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                $ref: "#/components/schemas/producto"
+              quantity:
+                type: integer
+                example: 4
+    carritoNuevo: 
+      type: object
+      properties:
+        msg: 
+          type: string
+          example: "Carrito actualizado"
+        carrito:
+          type: object
+          properties:
+            _id: 
+              type: string
+              example: "66a418e623be15abd1fb06f4"
+            products: 
+              type: string
+              example: "[]"
+    carritoQuantity: 
+      type: object
+      properties:
+        msg: 
+          type: string
+          example: "Carrito actualizado"
+        carrito:
+          type: object
+          properties:
+            id: 
+              type: string
+              example: "66a418e623be15abd1fb06f4"
+            quantity: 
+              type: string
+              example: "8"
+    carritoEliminado: 
+      type: object
+      properties:
+        msg: 
+          type: string
+          example: "Producto eliminado del carrito"
+        carrito:
+          type: object
+          properties:
+            _id: 
+              type: string
+              example: "66a418e623be15abd1fb06f4"
+            products: 
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "668590399d4764ff86f40b04"
+                  quantity:
+                    type: integer
+                    example: 3          
+    producto:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "667f6fd2c592ef6f5f7b5270"
+        title:
+          type: string
+          example: "Banana"
+        description:
+          type: string
+          example: "Verdura"
+        price:
+          type: integer
+          example: 330
+        thumbnail:
+          type: array
+          items:
+            type: string
+        code:
+          type: string
+          example: "123"
+        stock:
+          type: integer
+          example: 1406
+        status:
+          type: boolean
+          example: true
+        category:
+          type: string
+          example: "Verdura"
+        __v:
+          type: integer
+          example: 0
+        owner:
+          type: string
+          example: "admin"
+    error1:
+      type: object
+      properties:
+        error:
+          type: string
+          description: "Complete email y password"
+    error2:
+      type: object
+      properties:
+        error:
+          type: string
+          description: "Argumentos inválidos"
+
+  requestBodies:
+    cambiarQuantity:
+      type: object
+      properties:
+        quantity:
+          type: string
+          description: "Cantidad del producto"       
+      example:
+        quantity: 8
