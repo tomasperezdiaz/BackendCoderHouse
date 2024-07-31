@@ -86,28 +86,28 @@ paths:
                   - $ref: "#/components/schemas/error1"
                   - $ref: "#/components/schemas/error2"
     post:
-      summary: Agrega un producto
+      summary: Crea un nuevo producto
       tags:
         - Productos
-      description: Este endpoint sube un producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/requestBodies/createProduct"
       responses:
         "200":
           description: Producto agregado correctamente
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
+                $ref: "#/components/schemas/producto"
         "400":
-          description: "Request invalido"
+          description: "Request inválido"
           content:
             application/json:
               schema:
-                oneOf: 
+                oneOf:
                   - $ref: "#/components/schemas/error1"
                   - $ref: "#/components/schemas/error2"
   /api/products/{id}:
@@ -146,6 +146,12 @@ paths:
       tags:
         - Productos
       description: Este endpoint actualiza un producto específico del ecommerce por ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/requestBodies/actualizarProduct"
       parameters:
         - name: id
           in: path
@@ -159,12 +165,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
+                $ref: "#/components/schemas/producto"
         "400":
           description: "Request invalido"
           content:
@@ -244,13 +245,85 @@ components:
           example: "Fruta"
     error1:
       type: object
-      properties: 
+      properties:
         error:
           type: string
           description: "Complete email y password"
     error2:
       type: object
-      properties: 
+      properties:
         error:
           type: string
           description: "Argumentos inválidos"
+
+  requestBodies:
+    createProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: "Titulo del producto"
+        description:
+          type: string
+          description: "descripcion del producto"
+        price:
+          type: string
+          description: "Precio del producto"
+        code:
+          type: string
+          description: "Codigo del producto"
+        stock:
+          type: string
+          description: "Cantidad de stock del producto"
+        category:
+          type: string
+          description: "Categoria del producto"
+      example:
+        title: Naranja
+        description: Fruta naranja
+        price: 200
+        code: 120
+        stock: 1000
+        category: Fruta
+    actualizarProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "ID del producto"
+        title:
+          type: string
+          description: "Titulo del producto"
+        description:
+          type: string
+          description: "descripcion del producto"
+        price:
+          type: string
+          description: "Precio del producto"
+        thumbnails:
+          type: string
+          description: "Imagen del producto"
+        code:
+          type: string
+          description: "Codigo del producto"
+        stock:
+          type: string
+          description: "Cantidad de stock del producto"
+        category:
+          type: string
+          description: "Categoria del producto"
+        status:
+          type: string
+          description: "Status del producto"
+      example:
+        id: 5
+        title: Naranja
+        description: Fruta naranja
+        price: 200
+        thumbnails: []
+        code: 120
+        stock: 1000
+        category: Fruta
+        status: false
+
+      

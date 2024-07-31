@@ -42,7 +42,7 @@ export const addProduct = async (req = request, res = response, next) => {
         ERROR_TYPES.ARGUMENTOS_INVALIDOS
       );
 
-    const producto = await ProductRepository.addProduct({ ...req.body, owner });
+    const producto = await ProductRepository.addProduct({ ...req.body});
     return res.json({ producto });
   } catch (error) {
     next(error);
