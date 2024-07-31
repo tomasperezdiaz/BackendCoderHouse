@@ -1,10 +1,19 @@
 paths:
-  /api/carts/:cid:
+  /api/carts/{cid}:
     get:
-      summary: Retorna una lista de carritos
+      summary: Devulve el carrito con el ID solicitado
       tags:
         - Carritos
-      description: Este endpoint trae la lista de carritos del ecommerce
+      description: Este endpoint devuelve el carrito conel ID seleccionado
+      security:
+        - BasicAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
       responses:
         "200":
           description: JSON array carritos
@@ -14,7 +23,7 @@ paths:
                 type: array
                 items:
                   type: string
-        "404":
+        "400":
           description: Error
           content:
             application/json:
@@ -23,10 +32,17 @@ paths:
                 items:
                   type: string
     delete:
-      summary: Borra el carrito seleccionado
+      summary: Borra los productos del ID del carrito seleccionado
       tags:
         - Carritos
-      description: Este endpoint borra el carrito seleccionado del ecommerce
+      description: Este endpoint borra los productos del ID del carrito seleccionado
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
       responses:
         "200":
           description: JSON array carritos
@@ -49,7 +65,7 @@ paths:
       summary: Crea un carrito
       tags:
         - Carritos
-      description: Este endpoint crea un carrito del ecommerce
+      description: Este endpoint crea un carrito
       responses:
         "200":
           description: JSON array carritos
@@ -67,12 +83,27 @@ paths:
                 type: array
                 items:
                   type: string
-  /api/carts/:cid/product/:id:
+  /api/carts/{cid}/product/{id}:
     post:
       summary: Agrega un producto al carrito
       tags:
         - Carritos
-      description: Este endpoint agrega un producto al carrito del ecommerce
+      description: Este endpoint agrega un producto al carrito 
+      security:
+        - BasicAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
       responses:
         "200":
           description: JSON array carritos
@@ -94,7 +125,20 @@ paths:
       summary: Borra un producto del carrito
       tags:
         - Carritos
-      description: Este endpoint borra un producto del carrito del ecommerce
+      description: Este endpoint borra un producto del carrito
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
       responses:
         "200":
           description: JSON array carritos
@@ -113,10 +157,23 @@ paths:
                 items:
                   type: string
     put:
-      summary: Actualiza los productos de un carrito
+      summary: Actualiza la cantidad de un producto del carrito seleccionado
       tags:
         - Carritos
-      description: Este endpoint actualiza los productos de un carrito del ecommerce
+      description: Este endpoint actualiza la cantidad de un producto del carrito seleccionado
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
       responses:
         "200":
           description: JSON array carritos
@@ -134,12 +191,19 @@ paths:
                 type: array
                 items:
                   type: string
-  /api/carts/:cid/purchase:
+  /api/carts/{cid}/purchase:
    post:
       summary: Finaliza la compra
       tags:
         - Carritos
-      description: Este endpoint finaliza la compra del carrito del ecommerce
+      description: Este endpoint finaliza la compra del carrito y genera un ticket con un ID
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
       responses:
         "200":
           description: JSON array carritos
@@ -157,4 +221,8 @@ paths:
                 type: array
                 items:
                   type: string                  
- 
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

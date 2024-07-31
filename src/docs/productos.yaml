@@ -5,6 +5,8 @@ paths:
       tags:
         - Productos
       description: Este endpoint trae la lista de productos del ecommerce
+      security:
+        - BasicAuth: []
       responses:
         "200":
           description: JSON array de nombres de productos
@@ -45,6 +47,13 @@ paths:
       tags:
         - Productos
       description: Este endpoint trae un producto específico del ecommerce por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
       responses:
         "200":
           description: Información del producto
@@ -71,6 +80,13 @@ paths:
       tags:
         - Productos
       description: Este endpoint actualiza un producto específico del ecommerce por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
       responses:
         "200":
           description: Producto actualizado correctamente
@@ -97,6 +113,13 @@ paths:
       tags:
         - Productos
       description: Este endpoint borra un producto del ecommerce por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto
       responses:
         "200":
           description: Producto borrado exitosamente
@@ -118,3 +141,8 @@ paths:
                 properties:
                   message:
                     type: string
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
