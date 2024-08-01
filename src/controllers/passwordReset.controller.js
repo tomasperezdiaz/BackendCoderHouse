@@ -58,14 +58,10 @@ export const resetPassword = (req, res) => {
 export const updatePassword = async (req, res) => {
   const token = req.params.token;
   const newPassword = req.body.password;
-  console.log(token);
-  console.log(newPassword);
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await userModel.findOne({ email: decoded.email });
 
-    console.log(decoded);
-    console.log(user);
     if (!user) {
       return CustomError.createError(
         "ERROR",
@@ -92,11 +88,8 @@ export const updatePassword = async (req, res) => {
         ERROR_TYPES.ARGUMENTOS_INVALIDOS
       );
     }
-    
-
     const hash = createHashs(newPassword);
     user.password = hash;
-    console.log(hash);
     await user.save();
     res.status(200).send("La contraseña se ha cambiado");
   } catch (err) {
