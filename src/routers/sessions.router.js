@@ -23,10 +23,12 @@ router.get("/login", loginView);
 router.get("/register", registerView);
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: "/login" }),
+  passport.authenticate("login", { failureRedirect: "/login", }),
   loginPostView
 );
 router.get("/logout", logOut);
+
+
 router.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] }),

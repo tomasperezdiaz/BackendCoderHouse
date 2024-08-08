@@ -64,6 +64,7 @@ export const loginView = async (req, res) => {
   const isAuthenticated = req.session.user !== undefined;
 
   if (isAuthenticated) return res.redirect("/");
+
   return res.render("login", { title: "Login", styles: "styles.css" });
 };
 
@@ -75,13 +76,31 @@ export const registerView = async (req, res) => {
 };
 
 export const registerPostView = async (req, res) => {
-  if (!req.user) return res.redirect("/register");
+  if (!req.user) {
+    if (req.headers["postman-token"]) {
+      return res.status(404).json({ message: "Error en el registro" });
+    }
+    return res.status(404).redirect("/register");
+  }
 
-  return res.redirect("/login");
+  if (req.headers["postman-token"]) {
+    return res
+      .status(200)
+      .json({ message: "Usuario creado", newUser: req.user });
+  }
+  return res
+  .status(200)
+  .json({ payload: "Successful registration", newUser: req.user });
 };
 
 export const loginPostView = async (req, res) => {
-  if (!req.user) return res.redirect("/login");
+  let { web } = req.body;
+  if (!req.user) {
+    if (req.headers["postman-token"]) {
+      return res.status(200).json({ message: "Error en el login" });
+    }
+    return res.status(404).redirect("/login");
+  }
 
   req.session.user = {
     name: req.user.name,
@@ -91,7 +110,18 @@ export const loginPostView = async (req, res) => {
     image: req.user.image,
     cart: req.user.cart,
   };
-  return res.redirect("/");
+
+  if (req.headers["postman-token"]) {
+    return res.status(200).json({ message: "Login exitoso", user: req.user });
+  }
+
+  if (web) {
+    res.redirect("/");
+  } 
+  
+  
+  return res.json({ payload: "Successfull login" });
+  
 };
 
 export const logOut = async (req, res) => {

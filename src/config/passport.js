@@ -47,10 +47,10 @@ export const initialPassport = () => {
           const user = await UserRepository.getUserEmail(userName);
 
           if (!user) {
-            done(null, false);
+            done(null, false, { message: "User not found" });
           }
           if (!isValidPass(password, user.password)) {
-            return done(null, false);
+            return done(null, false,  { message: "Invalid password" });
           }
           return done(null, user);
         } catch (error) {
